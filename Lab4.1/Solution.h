@@ -45,15 +45,13 @@ static std::vector<std::string> permutations{
 
 class Solution 
 {
-public:
+private:
+	
 	class Cube_solution : public Cube
 	{
 	private:
 
-		void calculate_fitness()
-		{
-			fitness = misplaced_stickers();
-		}
+		void calculate_fitness() { fitness = misplaced_stickers(); }
 
 	public:
 		int fitness;
@@ -61,10 +59,7 @@ public:
 
 		Cube_solution() : Cube(), fitness(100) {}
 
-		bool operator<(const Cube_solution& other)
-		{
-			return this->fitness < other.fitness;
-		}
+		bool operator<(const Cube_solution& other) { return this->fitness < other.fitness; }
 
 		Cube_solution(const Cube& other) : Cube(other), fitness(100) {}
 
@@ -84,7 +79,7 @@ public:
 			move_history += full_rotations[rnd] + " ";
 		}
 
-		void random_orientation() 
+		void random_orientation()
 		{
 			int rnd = rand() % orientations.size();
 			execute(orientations[rnd]);
@@ -94,6 +89,7 @@ public:
 	};
 
 private:
+
 	int generations;
 	int resets;
 	int elitarity;
@@ -103,11 +99,12 @@ private:
 	std::string string_solution;
 
 public:
-	class Cube_solution;
-	Solution(int ppl_, int gens_, int resets_, int elit_, const Cube & cube_) : cube(cube_), population(ppl_), generations(gens_), resets(resets_), elitarity(elit_) 
-	{
-		cubes.resize(population);
-	}
+
+	Solution(int ppl_, int gens_, int resets_, int elit_, const Cube & cube_) : 
+		cube(cube_), 
+		population(ppl_), generations(gens_), 
+		resets(resets_), elitarity(elit_), 
+		cubes(std::vector<Cube_solution>(population)) {}
 
 	void solve() 
 	{
@@ -139,13 +136,6 @@ public:
 						std::cout << cubes[i];
 						return;
 					}
-
-					/*if (cubes[i].fitness == 4) 
-					{
-						std::cout << cubes[i].move_history << std::endl;
-						std::cout << cubes[i];
-						return;
-					}*/
 
 					if (i > elitarity) 
 					{
