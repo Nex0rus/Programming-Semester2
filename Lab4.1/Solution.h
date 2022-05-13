@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 
+
 static std::vector<std::string> full_rotations{
 	"X", "X'", "X2", "Y", "Y'", "Y2"
 };
@@ -89,24 +90,24 @@ private:
 	};
 
 private:
-
 	int generations;
 	int resets;
 	int elitarity;
 	int population;
-	const Cube& cube;
+	Cube cube;
 	std::vector<Cube_solution> cubes;
 	std::string string_solution;
+	
 
 public:
-
-	Solution(int ppl_, int gens_, int resets_, int elit_, const Cube & cube_) : 
+	
+	Solution(int ppl_, int gens_, int resets_, int elit_, Cube cube_) : 
 		cube(cube_), 
 		population(ppl_), generations(gens_), 
 		resets(resets_), elitarity(elit_), 
 		cubes(std::vector<Cube_solution>(population)) {}
 
-	void solve() 
+	void operator()(void)
 	{
 		for (int r = 0; r < resets; ++r)
 		{
@@ -180,8 +181,6 @@ public:
 				}
 			}
 		}
-
-		string_solution = "";
 	}
 
 };

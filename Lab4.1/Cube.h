@@ -7,7 +7,11 @@
 #include <string>
 #include <conio.h>
 #include <chrono>
+#include <atomic>
 #include <thread>
+#include <future>
+
+class Cube;
 
 enum COLORS { WHITE, ORANGE, GREEN, RED, BLUE, YELLOW };
 enum COORDS { X = 1, Y = 2, Z = 3 };
@@ -21,7 +25,6 @@ enum ConsoleColor {
 void setcur(int x, int y);  //установка курсора на позицию  x y
 
 void setColor(unsigned fg);
-
 
 class Cubie
 {
@@ -96,10 +99,10 @@ public:
 
 	Facet& operator=(const std::vector<char>& colors)
 	{
-		lines.resize(3 * sizeof(Line));
+		lines.resize(3);
 		for (int i = 0; i < 3; ++i)
 		{
-			lines[i] = std::vector<char>(colors.begin() + i * 3, colors.begin() + (i + 1) * 3);
+			lines[i] =  std::vector<char>(colors.begin() + i * 3, colors.begin() + (i + 1) * 3);
 		}
 
 		return *this;
@@ -168,5 +171,4 @@ public:
 	void free_mod();
 
 	void execute(const std::string& ops, int flag = MODE::HIDE);
-
 };

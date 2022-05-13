@@ -1,4 +1,4 @@
-#include "Cube.h"
+#include "Solution.h"
 
 static std::map<std::string, std::pair<int, int> > moves{
 	{"U", {FACES::U, 1}}, {"U'", {FACES::U, -1}}, {"u", {FACES::U, -1}}, {"U2", {FACES::U, 2}}, {"I", {FACES::U, 2}},
@@ -80,11 +80,22 @@ void Cube::clockwise_rot_lr(int face)
 }
 
 
-void Cube::counter_clockwise_rot_lr(int face)
+void Cube::counter_clockwise_rot_lr(int face) 
 {
-	clockwise_rot_lr(face);
-	clockwise_rot_lr(face);
-	clockwise_rot_lr(face);
+	int ind = 0;
+	if (face == FACES::L)
+	{
+		ind = 2;
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		std::swap(faces[FACES::F][i][2 - ind], faces[(face == FACES::L) ? FACES::U : FACES::D][i][2 - ind]);
+		std::swap(faces[FACES::F][i][2 - ind], faces[FACES::B][2 - i][ind]);
+		std::swap(faces[FACES::F][i][2 - ind], faces[(face == FACES::L) ? FACES::D : FACES::U][i][2 - ind]);
+
+	}
+	matrix_rot(face, COUNTERCLOCKWISE);
 }
 
 
@@ -93,26 +104,37 @@ void Cube::clockwise_rot_ud(int face)
 	int layer;
 	if (face == FACES::U)
 	{
-		matrix_rot(FACES::U, CLOCKWISE);
 		layer = Facet::LAYERS::TOP;
 	}
 	else
 	{
-		matrix_rot(FACES::D, CLOCKWISE);
 		layer = Facet::LAYERS::DOWN;
 	}
 
+	matrix_rot(face, CLOCKWISE);
 	std::swap(faces[FACES::F][layer], faces[(face == FACES::U) ? FACES::L : FACES::R][layer]);
 	std::swap(faces[FACES::F][layer], faces[FACES::B][layer]);
 	std::swap(faces[FACES::F][layer], faces[(face == FACES::U) ? FACES::R : FACES::L][layer]);
 }
 
 
-void Cube::counter_clockwise_rot_ud(int face)
+void Cube::counter_clockwise_rot_ud(int face) 
 {
-	clockwise_rot_ud(face);
-	clockwise_rot_ud(face);
-	clockwise_rot_ud(face);
+	int layer;
+	if (face == FACES::U)
+	{
+		layer = Facet::LAYERS::TOP;
+	}
+	else
+	{
+		layer = Facet::LAYERS::DOWN;
+	}
+
+	matrix_rot(face, COUNTERCLOCKWISE);
+
+	std::swap(faces[FACES::F][layer], faces[(face == FACES::U) ? FACES::R : FACES::L][layer]);
+	std::swap(faces[FACES::F][layer], faces[FACES::B][layer]);
+	std::swap(faces[FACES::F][layer], faces[(face == FACES::U) ? FACES::L : FACES::R][layer]);
 }
 
 
@@ -138,10 +160,23 @@ void Cube::clockwise_rot_fb(int face)
 
 void Cube::counter_clockwise_rot_fb(int face)
 {
-	clockwise_rot_fb(face);
-	clockwise_rot_fb(face);
-	clockwise_rot_fb(face);
+	int ind = 0;
+	if (face == FACES::B)
+	{
+		ind = 2;
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		std::swap(faces[FACES::R][i][ind], faces[(face == FACES::F) ? FACES::U : FACES::D][2][(face == FACES::F) ? i : 2 - i]);
+		std::swap(faces[FACES::R][i][ind], faces[FACES::L][2 - i][2 - ind]);
+		std::swap(faces[FACES::R][i][ind], faces[(face == FACES::F) ? FACES::D : FACES::U][0][(face == FACES::F) ? 2 - i : i]);
+
+	}
+
+	matrix_rot(face, COUNTERCLOCKWISE);
 }
+
 
 
 void Cube::rotation(int face, int flag)

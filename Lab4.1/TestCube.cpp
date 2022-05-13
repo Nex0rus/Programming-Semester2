@@ -1,6 +1,5 @@
 #include "Solution.h"
 
-
 int main()
 {
 	std::vector< std::vector<char> >cube_src1{ 
@@ -21,11 +20,13 @@ int main()
 	};
 	char c = '0';
 	Cube cube(cube_src2);
-	cube.free_mod();
-	//cube.execute("X F U' B' U F' U' B U Z Y U2 R U2 R' F2 L F' L' U2 L' U2 L F' X2 Z2 U' B2 D2 L' F2 D2 B2 R' U' Z Y F U' B' U F' U' B U Y R' U L' U2 R U' L R' U L' U2 R U' L U' R' U2 R L' B2 L R' U2 R L' B2 L Z2 R' U2 R L' B2 L U B2 D2 R F2 D2 B2 L U Z X' D L D' L2 U L' B2 R' U R B2 U' L2 U2 R U2 R' F2 L F' L' U2 L' U2 L F' L' U2 L R' F2 R F R B L U L' U B' R' F' L' U' L U' F' U B U' F U B' U' U' B2 D2 L' F2 D2 B2 R' U' F' L' B' R' U' R U' B L F R U R' U X' Z2 R' U L' U2 R U' L R' U L' U2 R U' L U' R' U L' U2 R U' L R' U L' U2 R U' L U' Z Y U' B2 D2 L' F2 D2 B2 R' U' Y2 U' B2 D2 L' F2 D2 B2 R' U' Z X F R B L U L' U B' R' F' L' U' L U' F' L' B' R' U' R U' B L F R U R' U F R B L U L' U B' R' F' L' U' L U' Y R' U2 R L' B2 L Z2 X' R' U2 R L' B2 L Z Y F R B L U L' U B' R' F' L' U' L U' Y F R B L U L' U B' R' F' L' U' L U' U B2 D2 R F2 D2 B2 L U F' L' B' R' U' R U' B L F R U R' U F' L' B' R' U' R U' B L F R U R' U D' R' D R2 U' R B2 L U' L' B2 U R2 D L D' L2 U L' B2 R' U R B2 U' L2 Y' R' U2 R L' B2 L", MODE::SHOW);
+	//std::cout << cube;
+	/*cube.free_mod();*/
+	//std::cout << cube;
+	//cube.execute("X F U' B' U F' U' B U Z Y U2 R U2 R' F2 L F' L' U2 L' U2 L F' X2 Z2 U' B2 D2 L' F2 D2 B2 R' U' Z Y F U' B' U F' U' B U Y R' U L' U2 R U' L R' U L' U2 R U' L U' R' U2 R L' B2 L R' U2 R L' B2 L Z2 R' U2 R L' B2 L U B2 D2 R F2 D2 B2 L U Z X' D L D' L2 U L' B2 R' U R B2 U' L2 U2 R U2 R' F2 L F' L' U2 L' U2 L F' L' U2 L R' F2 R F R B L U L' U B' R' F' L' U' L U' F' U B U' F U B' U' U' B2 D2 L' F2 D2 B2 R' U' F' L' B' R' U' R U' B L F R U R' U X' Z2 R' U L' U2 R U' L R' U L' U2 R U' L U' R' U L' U2 R U' L R' U L' U2 R U' L U' Z Y U' B2 D2 L' F2 D2 B2 R' U' Y2 U' B2 D2 L' F2 D2 B2 R' U' Z X F R B L U L' U B' R' F' L' U' L U' F' L' B' R' U' R U' B L F R U R' U F R B L U L' U B' R' F' L' U' L U' Y R' U2 R L' B2 L Z2 X' R' U2 R L' B2 L Z Y F R B L U L' U B' R' F' L' U' L U' Y F R B L U L' U B' R' F' L' U' L U' U B2 D2 R F2 D2 B2 L U F' L' B' R' U' R U' B L F R U R' U F' L' B' R' U' R U' B L F R U R' U D' R' D R2 U' R B2 L U' L' B2 U R2 D L D' L2 U L' B2 R' U R B2 U' L2 Y' R' U2 R L' B2 L", MODE::HIDE);
 	/*cube.execute("U L");*/
-	/*std::cout << cube.misplaced_stickers();*/
-	/*Solution sol(1000, 70, 10, 100, cube);
-	sol.solve();*/
+	//std::cout << cube;
+	Solution sol(2000, 100, 10, 200, cube);
+	sol();
 	return 0;
 }
