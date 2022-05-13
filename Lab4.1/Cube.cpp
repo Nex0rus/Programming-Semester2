@@ -281,9 +281,15 @@ void Cube::flip(int coord, int flag)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				std::swap(faces[FACES::U][i][j], faces[(flag == 1) ? FACES::R : FACES::L][j][2 - i]);
+				std::swap(faces[FACES::U][i][j], faces[FACES::R][j][2 - i]);
 				std::swap(faces[FACES::U][i][j], faces[FACES::D][2 - i][2 - j]);
-				std::swap(faces[FACES::U][i][j], faces[(flag == 1) ? FACES::L : FACES::R][2 - j][i]);
+				std::swap(faces[FACES::U][i][j], faces[FACES::L][2 - j][i]);
+				/*else 
+				{
+					std::swap(faces[FACES::U][i][j], faces[FACES::L][2 - j][i]);
+					std::swap(faces[FACES::U][i][j], faces[FACES::D][2 - i][2 - j]);
+					std::swap(faces[FACES::U][i][j], faces[FACES::R][j][2 - i]);
+				}*/
 			}
 		}
 	}

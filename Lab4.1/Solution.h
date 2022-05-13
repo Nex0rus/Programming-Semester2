@@ -25,6 +25,10 @@ static std::vector<std::string> permutations{
 	"U' B2 D2 L' F2 D2 B2 R' U'",
 	// permutes three centers : F face, top, right, left
 	"U B2 D2 R F2 D2 B2 L U",
+	// twists one corner clockwise ЭТО МОЯ ФОРМУЛА МОЖЕТ ГОВНО?
+	"R F' R' F R F' R' F",
+	// Левое, Верхнее и правое ребра передней грани
+	//"U2 F' R2 U2 R2 F' R2 U2 F2 R2 U2 R2 F2 R2"
 	// U face : bottom edge < ->right edge, bottom right corner < ->top right corner
 	"D' R' D R2 U' R B2 L U' L' B2 U R2",
 	// U face : bottom edge < ->right edge, bottom right corner < ->left right corner
@@ -130,6 +134,12 @@ public:
 
 				for (int i = 0; i < cubes.size(); ++i)
 				{
+					/*if (cubes[i].fitness == 4) 
+					{
+						std::cout << cubes[i];
+						return;
+					}*/
+
 					if (cubes[i].fitness == 0)
 					{
 						string_solution += cubes[i].move_history;
