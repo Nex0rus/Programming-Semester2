@@ -29,6 +29,9 @@
     <ClCompile Include="Cube.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Solution.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Fitness4.txt">

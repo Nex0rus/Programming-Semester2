@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Solution.cpp" />
     <ClCompile Include="TestCube.cpp" />
   </ItemGroup>
   <ItemGroup>
