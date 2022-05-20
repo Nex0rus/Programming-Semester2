@@ -25,25 +25,35 @@ int main()
 	/*std::cout << cube;
 	cube.execute("U L R D F B X Y Z U' L' R' D' F' B' X2 Y2 Z2 U2 L2 R2 D2 F2 B2 X' Y' Z'");
 	std::cout << cube;*/
-	Cube cube;
+
+
+	/*Cube cube;
 	cube.scramble();
 	Cube cube1 = cube;
+	std::cout << cube << std::endl;
 	Solution solve(100, 200, 10, 10, cube);
 	solve();
-	cube1.execute(solve.get_string_solution());
 	std::cout << std::endl << "SOLUTION IS : " << solve.get_string_solution() << std::endl << cube1;
-	/*std::ofstream out("in.txt");
-	for (int i = 0; i < 10; ++i) 
+	cube1.execute(solve.get_string_solution());
+	std::cout << cube1;*/
+
+	Cube cube;
+	std::ofstream out("in.txt");
+	auto begin = std::chrono::steady_clock::now();
+	auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(begin - begin);
+	for (int i = 0; i < 30; ++i) 
 	{
+		std::cout << i << std::endl;
 		cube.scramble();
+		int misplaced = cube.misplaced_stickers();
 		auto begin = std::chrono::steady_clock::now();
 		Solution solve(100, 200, 10, 10, cube);
 		solve();
 		auto end = std::chrono::steady_clock::now();
-		auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-		out << elapsed_ms << std::endl;
-
-	}*/
+		elapsed_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+		out << elapsed_ms << "\t" << misplaced << std::endl;
+	}
+	std::cout << "AVG IS : " << elapsed_ms / 30 << std::endl;
 	/*cube.execute("L R U R L D");
 	cube.free_mod();*/
 	/*cube.scramble();
