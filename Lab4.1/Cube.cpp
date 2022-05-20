@@ -25,6 +25,9 @@ static std::map<std::string, int> str_to_int_color_map{
 	{"W", WHITE}, {"Y", YELLOW}, {"O", ORANGE}, {"R", RED}, {"G", GREEN}, {"B", BLUE}
 };
 
+static std::map<int, int> counter_color{
+	{WHITE, YELLOW}, {YELLOW, WHITE}, {ORANGE, RED}, {RED, ORANGE}, {GREEN, BLUE}, {BLUE, GREEN}
+};
 
 void setColor(unsigned fg) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -393,6 +396,47 @@ std::istream& operator>>(std::istream& is, Cube& c)
 
 	return is;
 
+}
+
+void Cube::validate() 
+{
+	std::vector<int> colors_count(6, 0);
+	for (int i = 0; i < 6; ++i) 
+	{
+		for (int j = 0; j < 3; j++) 
+		{
+			for (int k = 0; k < 3; ++k) 
+			{
+				colors_count[faces[i][j][k].get_color()] += 1;
+			}
+		}
+	}
+
+	for (int i = 0; i < 6; ++i) 
+	{
+		if (colors_count[i] != 9) 
+		{
+			throw std::logic_error("Failed to input invalid rubick's cube");
+			return;
+		}
+	}
+
+	for (int i = 0; i < 3; ++i) 
+	{
+		if (faces[i == FACES::U ? FACES::D : i + 2][1][1].get_color() != counter_color[faces[i][1][1].get_color()]) 
+		{
+			throw std::logic_error("Failed to input invalid rubick's cube");
+			return;
+		}
+	}
+
+	Solution sol(100, 200, 20, 10, *this);
+	int status_code = sol();
+	if (status_code != 0) 
+	{
+		throw std::logic_error("Failed to input invalid rubick's cube");
+		return;
+	}
 }
 
 void Cube::free_mode()

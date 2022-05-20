@@ -49,6 +49,7 @@ public:
 
 	bool operator!=(const Cubie & other) { return (this->color != other.color); }
 
+	char get_color() { return color; };
 };
 
 
@@ -175,7 +176,10 @@ private:
 	
 	// a single method to flip or to change the cube's orientation 
 	// using "enum COORDS" as a "coord" and flag=DIR::CLOCKWISE or flag=DIR::COUNTERCLOCKWISE
-	void flip(int coord, int flag);    
+	void flip(int coord, int flag);  
+
+	void validate();
+
 
 public:
 	friend class Facet;
