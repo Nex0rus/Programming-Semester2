@@ -2,7 +2,8 @@
 
 enum OP { PERMUTATION, ROTATION, ORIENTATION };
 
-static std::vector< std::vector<std::string> > operations{
+// operations that permutes/change orientation or make a rotation of a cube
+static std::vector< std::vector<std::string> > operations{ 
 	{
 		"F' L' B' R' U' R U' B L F R U R' U",
 
@@ -48,12 +49,16 @@ static std::vector< std::vector<std::string> > operations{
 	}
 };
 
-void Solution::Cube_solution::random_permutation() 
+  /////////////////////////////
+ // Cube_solution help class /
+/////////////////////////////
+
+void Solution::Cube_solution::random_permutation()
 {
 	int rand_pmt = rand() % operations[PERMUTATION].size();
 	execute(operations[PERMUTATION][rand_pmt]);
 	set_fitness();
-	move_seq.push_back({ PERMUTATION, rand_pmt });
+	move_seq.push_back({ PERMUTATION, rand_pmt }); // saves indexes of a concrete operation from "operations" vector
 }
 
 void Solution::Cube_solution::random_rotation()
@@ -72,7 +77,8 @@ void Solution::Cube_solution::random_orientation()
 	move_seq.push_back({ ORIENTATION, rand_ort });
 }
 
-void Solution::set_string_solution(std::vector<std::pair<int, int> > & seq)
+// decodes result from "operations" vector indexes to string
+void Solution::set_string_solution(std::vector<std::pair<int, int> > & seq) 
 {
 	for (auto it = seq.begin(); it != seq.end(); ++it) 
 	{
@@ -80,41 +86,40 @@ void Solution::set_string_solution(std::vector<std::pair<int, int> > & seq)
 	}
 }
 
-void Solution::operator()()
+  /////////////////////////////
+ // Solution class methods ///
+/////////////////////////////
+
+// basic genetic algorithm
+int Solution::operator()() 
 {
 
 	for (int r = 0; r < resets; ++r)
 	{
-		//std::cout << "RESET NUMBER : " << r << std::endl;
 
 		for (int p = 0; p < population; ++p)
 		{
 			cubes[p] = cube;
 			cubes[p].fitness = cube.misplaced_stickers();
-
-			// rnd operations on start to be executed
 		}
+
 		srand((unsigned)time(NULL));
 		for (int g = 0; g < generations; ++g)
 		{
-			//std::cout << "GENERATION NUMBER : " << g << std::endl;
-			std::sort(cubes.begin(), cubes.end());
-			//std::cout << "Best cube have " << cubes[0].fitness << " misplaced stickers ";
-			//std::cout << cubes[0];
+			std::sort(cubes.begin(), cubes.end()); // cubes are sorted in the reverse order of fitness encrease
 
 			for (int i = 0; i < cubes.size(); ++i)
 			{
 
 
-				if (cubes[i].fitness == 0)
+				if (cubes[i].fitness == 0) // if fitness == 0 than cube is solved and the res is converted
 				{
 					set_string_solution(cubes[i].move_seq);
-					//std::cout << "SOLUTION IS: \n" << string_solution << std::endl;
-					//std::cout << cubes[i];
-					return;
+					return 0;
 				}
 
-				if (i > elitarity)
+				if (i > elitarity) // all the cubes with worse fitness than ¹i cube are 
+					               // replaced with one randomly picked cube from first i cubes
 				{
 					cubes[i] = cubes[rand() % elitarity];
 					int decision = rand() % 6;
@@ -157,4 +162,6 @@ void Solution::operator()()
 			}
 		}
 	}
+	string_solution = "FAILED TO SOLVE";
+	return 1;
 }

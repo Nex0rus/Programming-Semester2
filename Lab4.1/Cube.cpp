@@ -1,23 +1,26 @@
 #include "Solution.h"
 
-static std::map<std::string, std::pair<int, int> > moves{
+// map converting letter notation of moves to pair of flags {face, direction}
+static std::map<std::string, std::pair<int, int> > moves{ 
 	{"U", {FACES::U, 1}}, {"U'", {FACES::U, -1}}, {"u", {FACES::U, -1}}, {"U2", {FACES::U, 2}}, {"I", {FACES::U, 2}},
 	{"L", {FACES::L, 1}}, {"L'", {FACES::L, -1}}, {"l", {FACES::L, -1}}, {"L2", {FACES::L, 2}}, {";", {FACES::L, 2}},
 	{"R", {FACES::R, 1}}, {"R'", {FACES::R, -1}}, {"r", {FACES::R, -1}}, {"R2", {FACES::R, 2}}, {"T", {FACES::R, 2}},
 	{"D", {FACES::D, 1}}, {"D'", {FACES::D, -1}}, {"d", {FACES::D, -1}}, {"D2", {FACES::D, 2}},
 	{"F", {FACES::F, 1}}, {"F'", {FACES::F, -1}}, {"f", {FACES::F, -1}}, {"F2", {FACES::F, 2}},
 	{"B", {FACES::B, 1}}, {"B'", {FACES::B, -1}}, {"b", {FACES::B, -1}}, {"B2", {FACES::B, 2}}, {"N", {FACES::B, 2}},
-	{"X", {X, 1}}, {"X'", {X, -1}}, {"x", {X, -1}}, {"X2", {X, 2}},
-	{"Y", {Y, 1}}, {"Y'", {Y, -1}}, {"y", {Y, -1}}, {"Y2", {Y, 2}},
+	{"X", {X, 1}}, {"X'", {X, -1}}, {"x", {X, -1}}, {"X2", {X, 2}}, {"H", {X, 1}}, {"K", {X, -1}},
+	{"Y", {Y, 1}}, {"Y'", {Y, -1}}, {"y", {Y, -1}}, {"Y2", {Y, 2}}, {"P", {Y, 1}}, {"M", {Y, -1}},
 	{"Z", {Z, 1}}, {"Z'", {Z, -1}}, {"z", {Z, -1}}, {"Z2", {Z, 2}}
 };
 
 
+// map converting program colors from "enum COLORS" to a pair {letter, ConsoleColor} 
 static std::map<int, std::pair<const char*, int>> int_to_str_color_map{
 	{WHITE, {"W", LightGray}}, {YELLOW, {"Y", Brown} }, {ORANGE, {"O", LightRed}},
 	{RED, {"R", Red}}, {GREEN, {"G", Green}}, {BLUE, {"B", Blue} }
 };
 
+// map converting letter notation of colors to element of "enum COLORS"
 static std::map<std::string, int> str_to_int_color_map{
 	{"W", WHITE}, {"Y", YELLOW}, {"O", ORANGE}, {"R", RED}, {"G", GREEN}, {"B", BLUE}
 };
@@ -30,7 +33,7 @@ void setColor(unsigned fg) {
 }
 
 
-void setcur(int x, int y) //установка курсора на позицию  x y
+void setcur(int x, int y)
 {
 	COORD coord;
 	coord.X = x;
@@ -331,7 +334,6 @@ int Cube::misplaced_stickers() const
 std::ostream& operator<<(std::ostream& os, const Cube& cube)
 {
 	setColor(LightGray);
-	/*os << "=============================" << std::endl;*/
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -353,7 +355,6 @@ std::ostream& operator<<(std::ostream& os, const Cube& cube)
 		os << "\t" << cube.faces[FACES::D][i] << std::endl;
 	}
 	setColor(LightGray);
-	//os << "=============================" << std::endl;
 	return os;
 }
 
@@ -394,26 +395,19 @@ std::istream& operator>>(std::istream& is, Cube& c)
 
 }
 
-void Cube::free_mod()
+void Cube::free_mode()
 {
 	std::cout << *this;
 	char c = '0';
-	while (c != 'Q')
+	while (c != 'Q' && c != 'q')
 	{
 		c = _getch();
 
-		if (c == -32)
+		if (c == -32) // 72 - row up 75 - row down 77 - row right 80 - row left 
 		{
 			c = _getch();
-			if (c == 72) // 72 - вверх 75 - вниз 77 - вправо 80 - влево
-			{
-				break;
-			}
 		}
-		else
-		{
-			execute(std::string() += c, SHOW);
-		}
+		execute(std::string() += c, SHOW);
 	}
 }
 
@@ -466,7 +460,6 @@ void Cube::scramble(int flag)
 		choice = rand() % (moves.size() - 1);
 		auto it = moves.begin();
 		std::advance(it, choice);
-		//std::cout << it->first << " ";
 		execute(it->first, flag);
 
 	}

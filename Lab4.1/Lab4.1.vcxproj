@@ -144,9 +144,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Solution.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="TestCube.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Fitness2.txt" />
+    <Text Include="Fitness3.txt" />
+    <Text Include="Fitness4.txt" />
+    <Text Include="in.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

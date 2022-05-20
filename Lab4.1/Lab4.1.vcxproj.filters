@@ -18,10 +18,30 @@
     <ClInclude Include="Cube.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Solution.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestCube.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Fitness4.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Fitness3.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Fitness2.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="in.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>
