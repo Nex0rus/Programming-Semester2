@@ -164,6 +164,8 @@ public:
 		}
 	}
 
+	friend std::istream & operator>>(std::istream& is, Cube& c);
+
 	int misplaced_stickers() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Cube& cube);
@@ -171,4 +173,6 @@ public:
 	void free_mod();
 
 	void execute(const std::string& ops, int flag = MODE::HIDE);
+
+	void scramble(int flag =MODE::HIDE);
 };

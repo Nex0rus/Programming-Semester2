@@ -13,9 +13,13 @@ static std::map<std::string, std::pair<int, int> > moves{
 };
 
 
-static std::map<int, std::pair<const char*, int>> color_map{
+static std::map<int, std::pair<const char*, int>> int_to_str_color_map{
 	{WHITE, {"W", LightGray}}, {YELLOW, {"Y", Brown} }, {ORANGE, {"O", LightRed}},
 	{RED, {"R", Red}}, {GREEN, {"G", Green}}, {BLUE, {"B", Blue} }
+};
+
+static std::map<std::string, int> str_to_int_color_map{
+	{"W", WHITE}, {"Y", YELLOW}, {"O", ORANGE}, {"R", RED}, {"G", GREEN}, {"B", BLUE}
 };
 
 
@@ -36,8 +40,8 @@ void setcur(int x, int y) //установка курсора на позицию  x y
 
 std::ostream& operator<<(std::ostream& os, const Cubie& cubie)
 {
-	setColor(color_map[cubie.color].second);
-	os << std::string(color_map[cubie.color].first);
+	setColor(int_to_str_color_map[cubie.color].second);
+	os << std::string(int_to_str_color_map[cubie.color].first);
 	return os;
 }
 
@@ -281,15 +285,20 @@ void Cube::flip(int coord, int flag)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				std::swap(faces[FACES::U][i][j], faces[FACES::R][j][2 - i]);
-				std::swap(faces[FACES::U][i][j], faces[FACES::D][2 - i][2 - j]);
-				std::swap(faces[FACES::U][i][j], faces[FACES::L][2 - j][i]);
-				/*else 
+				if (flag == 1) 
+				{
+					std::swap(faces[FACES::U][i][j], faces[FACES::R][j][2 - i]);
+					std::swap(faces[FACES::U][i][j], faces[FACES::D][2 - i][2 - j]);
+					std::swap(faces[FACES::U][i][j], faces[FACES::L][2 - j][i]);
+				}
+
+
+				else 
 				{
 					std::swap(faces[FACES::U][i][j], faces[FACES::L][2 - j][i]);
 					std::swap(faces[FACES::U][i][j], faces[FACES::D][2 - i][2 - j]);
 					std::swap(faces[FACES::U][i][j], faces[FACES::R][j][2 - i]);
-				}*/
+				}
 			}
 		}
 	}
@@ -322,7 +331,7 @@ int Cube::misplaced_stickers() const
 std::ostream& operator<<(std::ostream& os, const Cube& cube)
 {
 	setColor(LightGray);
-	os << "=============================" << std::endl;
+	/*os << "=============================" << std::endl;*/
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -344,10 +353,46 @@ std::ostream& operator<<(std::ostream& os, const Cube& cube)
 		os << "\t" << cube.faces[FACES::D][i] << std::endl;
 	}
 	setColor(LightGray);
-	os << "=============================" << std::endl;
+	//os << "=============================" << std::endl;
 	return os;
 }
 
+std::istream& operator>>(std::istream& is, Cube& c) 
+{
+	std::string elem;
+	for (int i = 0; i < 3; ++i) 
+	{
+		for (int j = 0; j < 3; ++j) 
+		{
+			is >> elem;
+			c.faces[FACES::U][i][j] = str_to_int_color_map[elem];
+		}
+	}
+
+	for (int lines = 0; lines < 3; ++lines) 
+	{
+		for (int faces = 1; faces < 5; ++faces) 
+		{
+			for (int cubies = 0; cubies < 3; ++cubies) 
+			{
+				is >> elem;
+				c.faces[faces][lines][cubies] = str_to_int_color_map[elem];
+			}
+		}
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			is >> elem;
+			c.faces[FACES::D][i][j] = str_to_int_color_map[elem];
+		}
+	}
+
+	return is;
+
+}
 
 void Cube::free_mod()
 {
@@ -406,6 +451,23 @@ void Cube::execute(const std::string& ops, int flag)
 			std::cout << *this;
 			std::this_thread::sleep_for(std::chrono::milliseconds(150));
 		}
+
+	}
+
+}
+
+void Cube::scramble(int flag)
+{
+	srand((unsigned)time(NULL));
+	int choice = 0;
+	int rnd = 0;
+	for (int i = 0; i < 15 + rand() % 15; ++i)
+	{
+		choice = rand() % (moves.size() - 1);
+		auto it = moves.begin();
+		std::advance(it, choice);
+		//std::cout << it->first << " ";
+		execute(it->first, flag);
 
 	}
 }

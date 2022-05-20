@@ -2,51 +2,55 @@
 #include "Cube.h"
 #include <algorithm>
 #include <random>
+#include <fstream>
 
+enum OP {PERMUTATION, ROTATION, ORIENTATION};
 
-static std::vector<std::string> full_rotations{
-	"X", "X'", "X2", "Y", "Y'", "Y2"
+static std::vector< std::vector<std::string> > operations{
+	{
+		"F' L' B' R' U' R U' B L F R U R' U",
+
+		"F R B L U L' U B' R' F' L' U' L U'",
+
+		"U2 B U2 B' R2 F R' F' U2 F' U2 F R'",
+
+		"U2 R U2 R' F2 L F' L' U2 L' U2 L F'",
+
+		"U2 R' U2 R U D' R2 B2 L2 B2 R2 U D F2",
+
+		"D2 R F2 U2 B2 L D F2 D2 R2 F2 U2 B2 L2 D' F2",
+
+		"F2 U2 R2 B2 L2 D' L2 B2 R2 U F2",
+
+		"U' B2 D2 L' F2 D2 B2 R' U'",
+
+		"U B2 D2 R F2 D2 B2 L U",
+
+		"R F' R' F R F' R' F",
+
+		"D' R' D R2 U' R B2 L U' L' B2 U R2",
+
+		"D L D' L2 U L' B2 R' U R B2 U' L2",
+
+		"R' U L' U2 R U' L R' U L' U2 R U' L U'",
+
+		"L U' R U2 L' U R' L U' R U2 L' U R' U",
+
+		"F' U B U' F U B' U'",
+
+		"F U' B' U F' U' B U",
+
+		"L' U2 L R' F2 R",
+
+		"R' U2 R L' B2 L"
+	},
+	{
+		"X", "X'", "X2", "Y", "Y'", "Y2"
+	},
+	{
+		"Z", "Z'", "Z2"
+	}
 };
-
-static std::vector<std::string> orientations{
-	"Z", "Z'", "Z2"
-};
-
-static std::vector<std::string> permutations{
-	// permutes two edges : U face, bottom edge and right edge
-	"F' L' B' R' U' R U' B L F R U R' U",
-	// permutes two edges : U face, bottom edge and left edge
-	"F R B L U L' U B' R' F' L' U' L U'",
-	// permutes two corners : U face, bottom left and bottom right
-	"U2 B U2 B' R2 F R' F' U2 F' U2 F R'",
-	//# permutes three corners : U face, bottom left and top left
-	"U2 R U2 R' F2 L F' L' U2 L' U2 L F'",
-	// permutes three centers : F face, top, right, bottom
-	"U' B2 D2 L' F2 D2 B2 R' U'",
-	// permutes three centers : F face, top, right, left
-	"U B2 D2 R F2 D2 B2 L U",
-	// twists one corner clockwise ЭТО МОЯ ФОРМУЛА МОЖЕТ ГОВНО?
-	"R F' R' F R F' R' F",
-	// Левое, Верхнее и правое ребра передней грани
-	//"U2 F' R2 U2 R2 F' R2 U2 F2 R2 U2 R2 F2 R2"
-	// U face : bottom edge < ->right edge, bottom right corner < ->top right corner
-	"D' R' D R2 U' R B2 L U' L' B2 U R2",
-	// U face : bottom edge < ->right edge, bottom right corner < ->left right corner
-	"D L D' L2 U L' B2 R' U R B2 U' L2",
-	// U face : top edge < ->bottom edge, bottom left corner < ->top right corner
-	"R' U L' U2 R U' L R' U L' U2 R U' L U'",
-	// U face : top edge < ->bottom edge, bottom right corner < ->top left corner
-	"L U' R U2 L' U R' L U' R U2 L' U R' U",
-	// permutes three corners : U face, bottom right, bottom leftand top left
-	"F' U B U' F U B' U'",
-	// permutes three corners : U face, bottom left, bottom rightand top right
-	"F U' B' U F' U' B U",
-	// permutes three edges : F face bottom, F face top, B face top
-	"L' U2 L R' F2 R",
-	// permutes three edges : F face top, B face top, B face bottom
-	"R' U2 R L' B2 L"
-};
-
 
 class Solution 
 {
@@ -56,11 +60,11 @@ private:
 	{
 	private:
 
-		void calculate_fitness() { fitness = misplaced_stickers(); }
+		void set_fitness() { fitness = misplaced_stickers(); }
 
 	public:
 		int fitness;
-		std::string move_history;
+		std::string move_seq;
 
 		Cube_solution() : Cube(), fitness(100) {}
 
@@ -70,26 +74,27 @@ private:
 
 		void random_permutation()
 		{
-			int rnd = rand() % permutations.size();
-			execute(permutations[rnd]);
-			calculate_fitness();
-			move_history += permutations[rnd] + " ";
+			int rand_pmt = rand() % operations[PERMUTATION].size();
+			execute(operations[PERMUTATION][rand_pmt]);
+			set_fitness();
+			//move_history += std::string(1, char(65 + rand_pmt)) + " ";
+			move_seq += operations[PERMUTATION][rand_pmt] + " ";
 		}
 
 		void random_rotation()
 		{
-			int rnd = rand() % full_rotations.size();
-			execute(full_rotations[rnd]);
-			calculate_fitness();
-			move_history += full_rotations[rnd] + " ";
+			int rand_rot = rand() % operations[ROTATION].size();
+			execute(operations[ROTATION][rand_rot]);
+			set_fitness();
+			move_seq += operations[ROTATION][rand_rot] + " ";
 		}
 
 		void random_orientation()
 		{
-			int rnd = rand() % orientations.size();
-			execute(orientations[rnd]);
-			calculate_fitness();
-			move_history += orientations[rnd] + " ";
+			int rand_ort = rand() % operations[ORIENTATION].size();
+			execute(operations[ORIENTATION][rand_ort]);
+			set_fitness();
+			move_seq += operations[ORIENTATION][rand_ort] + " ";
 		}
 	};
 
@@ -109,13 +114,19 @@ public:
 		cube(cube_), 
 		population(ppl_), generations(gens_), 
 		resets(resets_), elitarity(elit_), 
-		cubes(std::vector<Cube_solution>(population)) {}
+		cubes(std::vector<Cube_solution>(population)), string_solution("") {}
+
+	std::string get_string_solution()
+	{
+		return string_solution;
+	}
 
 	void operator()(void)
 	{
+
 		for (int r = 0; r < resets; ++r)
 		{
-			/*std::cout << "RESET NUMBER : " << r << std::endl;*/
+			//std::cout << "RESET NUMBER : " << r << std::endl;
 
 			for (int p = 0; p < population; ++p)
 			{
@@ -127,24 +138,20 @@ public:
 			srand((unsigned)time(NULL));
 			for (int g = 0; g < generations; ++g)
 			{
-				std::cout << "GENERATION NUMBER : " << g << std::endl;
+				//std::cout << "GENERATION NUMBER : " << g << std::endl;
 				std::sort(cubes.begin(), cubes.end());
-				std::cout << "Best cube have " << cubes[0].fitness << " misplaced stickers ";
+				//std::cout << "Best cube have " << cubes[0].fitness << " misplaced stickers ";
 				//std::cout << cubes[0];
 
 				for (int i = 0; i < cubes.size(); ++i)
 				{
-					/*if (cubes[i].fitness == 4) 
-					{
-						std::cout << cubes[i];
-						return;
-					}*/
+
 
 					if (cubes[i].fitness == 0)
 					{
-						string_solution += cubes[i].move_history;
-						std::cout << string_solution << std::endl;
-						std::cout << cubes[i];
+						string_solution += cubes[i].move_seq;
+						//std::cout << "SOLUTION IS: \n" << string_solution << std::endl;
+						//std::cout << cubes[i];
 						return;
 					}
 
