@@ -44,7 +44,7 @@ void setcur(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 };
 
-std::ostream& operator<<(std::ostream& os, const Cubie& cubie)
+std::ostream& operator<<(std::ostream& os, const Sticker& cubie)
 {
 	setColor(int_to_str_color_map[cubie.color].second);
 	os << std::string(int_to_str_color_map[cubie.color].first);
@@ -317,7 +317,7 @@ int Cube::misplaced_stickers() const
 	int misplaced = 0;
 	for (int face = 0; face < 6; ++face)
 	{
-		Cubie etalon = faces[face][Facet::LAYERS::MID][1];
+		Sticker etalon = faces[face][Facet::LAYERS::MID][1];
 		for (int line = 0; line < 3; ++line)
 		{
 			for (int cubie = 0; cubie < 3; ++cubie)
@@ -363,13 +363,14 @@ std::ostream& operator<<(std::ostream& os, const Cube& cube)
 
 std::istream& operator>>(std::istream& is, Cube& c) 
 {
+	Cube tmp;
 	std::string elem;
 	for (int i = 0; i < 3; ++i) 
 	{
 		for (int j = 0; j < 3; ++j) 
 		{
 			is >> elem;
-			c.faces[FACES::U][i][j] = str_to_int_color_map[elem];
+			tmp.faces[FACES::U][i][j] = str_to_int_color_map[elem];
 		}
 	}
 
@@ -380,7 +381,7 @@ std::istream& operator>>(std::istream& is, Cube& c)
 			for (int cubies = 0; cubies < 3; ++cubies) 
 			{
 				is >> elem;
-				c.faces[faces][lines][cubies] = str_to_int_color_map[elem];
+				tmp.faces[faces][lines][cubies] = str_to_int_color_map[elem];
 			}
 		}
 	}
@@ -390,11 +391,23 @@ std::istream& operator>>(std::istream& is, Cube& c)
 		for (int j = 0; j < 3; ++j)
 		{
 			is >> elem;
-			c.faces[FACES::D][i][j] = str_to_int_color_map[elem];
+			tmp.faces[FACES::D][i][j] = str_to_int_color_map[elem];
 		}
 	}
+	try 
+	{
+		tmp.validate();
+	}
 
+	catch (const std::logic_error& e)
+	{
+		std::cout << e.what() << '\n'; 
+		return is;
+	}
+
+	c = tmp;
 	return is;
+	
 
 }
 
@@ -430,7 +443,7 @@ void Cube::validate()
 		}
 	}
 
-	Solution sol(100, 200, 20, 10, *this);
+	Solution sol(1000, 75, 20, 100, *this);
 	int status_code = sol();
 	if (status_code != 0) 
 	{
@@ -465,7 +478,7 @@ void Cube::execute(const std::string& ops, int flag)
 	{
 		tmp = tolower(res[0]);
 
-		if (tmp == 'x' || tmp == 'y' || tmp == 'z')
+		if (tmp == 'x' || tmp == 'y' || tmp == 'z' || tmp == 'h' || tmp == 'p' || tmp == 'k' || tmp == 'm')
 		{
 			if (moves[res].second == 2)
 			{

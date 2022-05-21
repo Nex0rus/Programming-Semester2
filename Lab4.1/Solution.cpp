@@ -162,6 +162,7 @@ int Solution::operator()()
 			}
 		}
 	}
-	string_solution = "FAILED TO SOLVE";
+
+	string_solution = "";
 	return 1;
 }

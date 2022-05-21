@@ -29,25 +29,25 @@ void setcur(int x, int y);
 void setColor(unsigned fg);
 
   /////////////////////////////
- //       Cubie class       //
+ //      Sticker class      //
 /////////////////////////////
-class Cubie
+class Sticker
 {
 private:
 	char color;
 
 public:
 
-	Cubie& operator=(char color_)
+	Sticker& operator=(char color_)
 	{
 		color = color_;
 		return *this;
 	}
 
 	// displays one sticker with its color in the ostream
-	friend std::ostream& operator<<(std::ostream& os, const Cubie& cubie);
+	friend std::ostream& operator<<(std::ostream& os, const Sticker& cubie);
 
-	bool operator!=(const Cubie & other) { return (this->color != other.color); }
+	bool operator!=(const Sticker & other) { return (this->color != other.color); }
 
 	char get_color() { return color; };
 };
@@ -60,10 +60,10 @@ public:
 class Line
 {
 private:
-	std::vector<Cubie> cubies;
+	std::vector<Sticker> cubies;
 public:
 
-	Line() : cubies(std::vector<Cubie>(3)) {}
+	Line() : cubies(std::vector<Sticker>(3)) {}
 
 	Line(std::vector<char> colors) { (*this) = colors; }
 
@@ -79,7 +79,7 @@ public:
 
 	Line& operator=(std::vector<char>& colors)
 	{
-		cubies.resize(3 * sizeof(Cubie));
+		cubies.resize(3 * sizeof(Sticker));
 		for (int i = 0; i < 3; ++i)
 		{
 			cubies[i] = colors[i];
@@ -87,9 +87,9 @@ public:
 		return *this;
 	}
 
-	Cubie& operator[](size_t i) { return cubies[i]; }
+	Sticker& operator[](size_t i) { return cubies[i]; }
 
-	const Cubie& operator[](size_t i) const { return cubies[i]; }
+	const Sticker& operator[](size_t i) const { return cubies[i]; }
 };
 
   ////////////////////////////
@@ -168,7 +168,6 @@ private:
 	// rotates front (FACES::F) or back (FACES::B) face counterclockwise
 	void counter_clockwise_rot_fb(int face); 
 
-
 	// a single method to rotate any face - use "enum FACES"  clockwise - use flag=DIR::CLOCKWISE
 	// counterclockwise - use flag=DIR::COUNTERCLOCKWISE 
 	// or double - use flag=DIR::DOUBLE from "enum DIR"
@@ -182,7 +181,8 @@ private:
 
 
 public:
-	friend class Facet;
+
+	//friend class Facet;
 	Cube() : faces(std::vector<Facet>(6))
 	{
 		for (int i = 0; i < 6; ++i) 
@@ -220,6 +220,6 @@ public:
 	// use flag=MODE::SHOW for operations to be shown flag=MODE::HIDE is a default value
 	void execute(const std::string& ops, int flag = MODE::HIDE);
 
-	// applies random operations to a cube
-	void scramble(int flag =MODE::HIDE);
+	// applies random operations to a cube use flag=MODE::SHOW to display the scrambling process
+	void scramble(int flag = MODE::HIDE);
 };

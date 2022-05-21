@@ -22,27 +22,34 @@ int main()
 	char c = '0';
 
 	Cube cube;
-	std::ofstream out("in.txt");
+	Cube cube1;
 	auto begin = std::chrono::steady_clock::now();
 	auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(begin - begin);
 	int ret = 0;
-	for (int i = 0; i < 100; ++i) 
-	{
-		std::cout << i << std::endl;
-		cube.scramble();
-		int misplaced = cube.misplaced_stickers();
-		auto begin = std::chrono::steady_clock::now();
-		Solution solve(100, 200, 20, 10, cube);
-		ret = solve();
-		if (ret != 0) 
-		{
-			std::cout << "PROBLEM OCCURED" << cube;
-		}
-		auto end = std::chrono::steady_clock::now();
-		elapsed_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-		out << elapsed_ms << "\t" << misplaced << std::endl;
-	}
-	std::cout << "AVG IS : " << elapsed_ms / 30 << std::endl;
+	cube.scramble();
+	cube.free_mode();
+	//for (int i = 0; i < 100; ++i) 
+	//{
+	//	std::cout << i << std::endl;
+	//	cube.scramble();
+	//	int misplaced = cube.misplaced_stickers();
+	//	auto begin = std::chrono::steady_clock::now();
+	///*	Solution solve(500, 75, 20, 50, cube);
+	//	ret = solve();
+	//	if (ret != 0) 
+	//	{
+	//		std::cout << "PROBLEM OCCURED" << cube;
+	//	}*/
+	//	std::ofstream out("in.txt");
+	//	out << cube;
+	//	std::ifstream is("in.txt");
+	//	is >> cube1;
+	//	std::cout << cube1;
+	//	auto end = std::chrono::steady_clock::now();
+	//	elapsed_ms += std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+	//	out << elapsed_ms << "\t" << misplaced << std::endl;
+	//}
+	//std::cout << "AVG IS : " << elapsed_ms / 30 << std::endl;
 
 	return 0;
 }

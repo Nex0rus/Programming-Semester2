@@ -32,13 +32,13 @@ private:
 
 		Cube_solution(const Cube& other) : Cube(other), fitness(100) {}
 
-		// permutation that is randomly picked from "operations" vector
+		// applies permutation that is randomly picked from "operations" vector
 		void random_permutation(); 
 
-		// rotation that is randomly picked from "operations" vector (X, X', X2, Y, Y', Y2)
+		// applies rotation that is randomly picked from "operations" vector (X, X', X2, Y, Y', Y2)
 		void random_rotation();    
 
-		// orientation that is randomly picked from "operations" vector (Z, Z', Z2)
+		// applies orientation that is randomly picked from "operations" vector (Z, Z', Z2)
 		void random_orientation(); 
 	};
 
