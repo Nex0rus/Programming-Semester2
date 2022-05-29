@@ -6,11 +6,26 @@
 #include <exception>
 #include <memory>
 
+// Chunks and Buckets together form a sort of single linked list, presented in raw memory as follows:
+//  ...#| --------------- Allocated Memory ------------------ |#...
+//  ...#|----- Bucket1 -----|#| ---------- Bucket2 ---------- |#...
+//  ...#|Chunk||Chunk||Chunk|#| -Chunk- || -Chunk- || -Chunk- |#...
+
+
+// Chunk is an abstraction of memory element with particular size, in fact the allocator 
+// just reinterpretes raw allocated memory as a Chunk 
+// (so that the pointer to the next chunk in a linked list can be dereferenced)
+// Such a solution help avoiding extra memory costs for storing pointers to the parts of raw memory
 struct Chunk 
 {
 	Chunk* next;
 };
 
+// Bucket is an abtraction of chunk storage, for instance single bucket is managing severeal chunks of equal size
+// Although, the bottle neck there is the problem of extra costs for storing "chunk_size" and a couple of pointers:
+// one pointing to the available chunk that can be allocated by user and the other pointing to next Bucket, 
+// forming a single source linked list of buckets. All in all a bucket is a memory reinterpreted 
+// as a header of 12 or 24 bytes depending on the system that gives allocator an access to chunks in O(1) complexity.
 
 struct Bucket 
 {
@@ -19,6 +34,12 @@ struct Bucket
 	Chunk* available_chunk = nullptr;
 };
 
+// Custom memory pool allocator that avoids linear search for available chunk -> search is O(h) where h 
+// is a number of buckets (storing chunks). Requires only few extra bytes as the pointers 
+// are stored in an alreay allocated memory that is being reinterpreted as a user data 
+// or as a "inner" pointers used for linking together chunks and buckets.
+// The data pointer is a shared_ptr so the data and objects it contains are not being destroyed 
+// when some copy of an allocator sharing the same data destructs.
 
 template <class T>
 class PoolAllocator 
