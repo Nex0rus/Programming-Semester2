@@ -6,9 +6,7 @@ using std::chrono::high_resolution_clock;
 
 int main() 
 {
-	//std::cout << "Chunk size: " << sizeof(Chunk) << std::endl;
-	//std::cout << "Bucket size: " << sizeof(Bucket) << std::endl;
-	std::cout << "Hello there" << std::endl;
+
 	{
 		
 
@@ -24,7 +22,7 @@ int main()
 		}
 		catch(std::bad_alloc) 
 		{
-			std::cout << "GREAT CRINGE ALLOCATION" << std::endl;
+			std::cout << "bad_alloc occured" << std::endl;
 		}
 
 	}
@@ -38,7 +36,6 @@ int main()
 		auto duration2 = duration_cast<std::chrono::microseconds>(t4 - t3).count();
 		std::cout << "Default: " << duration2 << std::endl;
 	}
-	std::cout << "Heap moment" << std::endl;
 	/*std::vector< int, PoolAllocator<int> > v(allocat);*/
 	
 	//for (auto it = l.begin(); it != l.end(); ++it)
@@ -50,7 +47,7 @@ int main()
 	//}
 	//catch (std::bad_alloc) 
 	//{
-	//	std::cout << "I DIED FROM CRINGE" << std::endl;
+	//	std::cout << "bad_alloc occured" << std::endl;
 	//}
 
 	return 0;
